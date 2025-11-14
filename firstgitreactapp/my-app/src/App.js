@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Home from "./components/Home";
+import Snake from "./components/Snake";
+import Pong from "./components/Pong";
 
 function App() {
+  const [game, setGame] = useState(null);
+
+  const renderGame = () => {
+    switch (game) {
+      case "snake":
+        return <Snake goHome={() => setGame(null)} />;
+      case "pong":
+        return <Pong goHome={() => setGame(null)} />;
+      default:
+        return <Home setGame={setGame} />;
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {renderGame()}
     </div>
   );
 }
 
 export default App;
+

@@ -1,16 +1,11 @@
 import React from "react";
+import './Home.css';
 
 const Home = ({ setGame }) => {
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh"
-    }}>
+    <div class="home-container" >
       <h1>React Games Hub</h1>
-      <div style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
+      <div class="button-zone">
         <button onClick={() => setGame("snake")}>Play Snake</button>
         <button onClick={() => setGame("pong")}>Play Pong</button>
       </div>

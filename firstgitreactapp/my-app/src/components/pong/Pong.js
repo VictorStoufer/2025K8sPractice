@@ -1,5 +1,6 @@
 // src/components/Pong.js
 import React, { useState, useEffect, useRef } from "react";
+import './Pong.css';
 
 const WIDTH = 600;
 const HEIGHT = 400;

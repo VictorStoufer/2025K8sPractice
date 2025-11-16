@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import './Snake.css';
 
 const CELL_SIZE = 20;
 const WIDTH = 600;

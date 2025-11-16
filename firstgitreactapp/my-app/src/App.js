@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import Home from "./components/Home";
-import Snake from "./components/Snake";
-import Pong from "./components/Pong";
+import Home from './components/home/Home';
+import Snake from './components/snake/Snake';
+import Pong from './components/pong/Pong';
+
 
 function App() {
   const [game, setGame] = useState(null);

@@ -3,11 +3,12 @@ import './Home.css';
 
 const Home = ({ setGame }) => {
   return (
-    <div class="home-container" >
+    <div className="home-container" >
       <h1>React Games Hub</h1>
-      <div class="button-zone">
+      <div className="button-zone">
         <button onClick={() => setGame("snake")}>Play Snake</button>
         <button onClick={() => setGame("pong")}>Play Pong</button>
+        <button onClick={() => setGame("skybound")}>Play Skybound Sprint</button>
       </div>
     </div>
   );

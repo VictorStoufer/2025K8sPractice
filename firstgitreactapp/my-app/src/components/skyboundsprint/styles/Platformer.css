@@ -1,3 +1,16 @@
+.platformer-wrapper {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+
+/*
 .platformer-root { 
   display:flex; 
   justify-content:center; 
@@ -39,3 +52,4 @@
   border-radius:8px; 
   border:none; 
 }
+*/

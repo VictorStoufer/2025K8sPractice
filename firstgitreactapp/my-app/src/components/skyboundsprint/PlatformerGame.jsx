@@ -2,8 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import Player from './Player';
 import Level from './Level';
 import { updatePhysics } from './Physics';
-import Enemy from './Enemy';
-import Coin from './Coin';
 import './styles/Platformer.css';
 import levelData from './levels/Level1.json';
 
@@ -12,100 +10,156 @@ export default function PlatformerGame({ goHome }) {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    const player = new Player(50, 400); // start above first platform
+    // Create level & player
     const level = new Level(levelData);
+    const player = new Player(50, 200); // start above the ground
 
+    // input state
     const keys = { left: false, right: false, jump: false };
 
-    // --- Keyboard input ---
+    // Input handlers (clean, not nested)
     const handleKeyDown = (e) => {
-      switch (e.key) {
-        case 'ArrowLeft': case 'a': case 'A':
-          keys.left = true; break;
-        case 'ArrowRight': case 'd': case 'D':
-          keys.right = true; break;
-        case 'ArrowUp': case 'w': case 'W': case ' ':
-          keys.jump = true; break;
-        default: break;
-      }
+      const k = e.key;
+      if (k === 'ArrowLeft' || k === 'a' || k === 'A') keys.left = true;
+      if (k === 'ArrowRight' || k === 'd' || k === 'D') keys.right = true;
+      if (k === 'ArrowUp' || k === 'w' || k === 'W' || k === ' ') keys.jump = true;
     };
-
     const handleKeyUp = (e) => {
-      switch (e.key) {
-        case 'ArrowLeft': case 'a': case 'A':
-          keys.left = false; break;
-        case 'ArrowRight': case 'd': case 'D':
-          keys.right = false; break;
-        case 'ArrowUp': case 'w': case 'W': case ' ':
-          keys.jump = false; break;
-        default: break;
-      }
+      const k = e.key;
+      if (k === 'ArrowLeft' || k === 'a' || k === 'A') keys.left = false;
+      if (k === 'ArrowRight' || k === 'd' || k === 'D') keys.right = false;
+      if (k === 'ArrowUp' || k === 'w' || k === 'W' || k === ' ') keys.jump = false;
     };
 
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
 
-    let lastTime = 0;
-    let animationFrameId;
+    let lastTime = performance.now();
+    let rafId = 0;
+
+    // helper: simple rect vs circle/rect checks for coin pickup
+    const rectRect = (ax, ay, aw, ah, bx, by, bw, bh) =>
+      ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
 
     const loop = (time) => {
-      const dt = (time - lastTime) / 1000;
+      const dt = Math.min(0.05, (time - lastTime) / 1000);
       lastTime = time;
 
-      // Apply input
-      player.applyInput(keys, 200);
+      // apply input if method exists
+      if (typeof player.applyInput === 'function') player.applyInput(keys, 200);
 
-      // Jump
-      if (keys.jump && player.onGround) {
+      // jump only from main loop (not inside applyInput)
+      if (keys.jump && player.onGround && typeof player.jump === 'function') {
         player.jump(350);
       }
 
-      // Update physics
-      updatePhysics(level, player, dt, { gravity: 800 });
+      // physics (this should update player.x/player.y and set player.onGround)
+      updatePhysics(level, player, dt, { gravity: 900 });
 
-      // Integrate movement
-      player.integrate(dt);
+      // if player has integrate(dt) call it (some implementations include it)
+      if (typeof player.integrate === 'function') {
+        player.integrate(dt);
+      }
 
-      // Clear canvas
+      // Coin collection: mark coin.collected when overlapping player
+      if (Array.isArray(level.coins)) {
+        level.coins.forEach((c) => {
+          if (c.collected) return;
+          // coin might be a simple object with x,y; treat as 12px box
+          const cr = c.r ?? 6;
+          // approximate coin bounding box for rect collision
+          if (rectRect(player.x, player.y, player.w, player.h, c.x - cr, c.y - cr, cr * 2, cr * 2)) {
+            c.collected = true;
+            // optional: you can increment a score here if you add state
+          }
+        });
+      }
+
+      // --- rendering ---
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw platforms
+      // background
+      ctx.fillStyle = '#9fd3ff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // draw platforms
       ctx.fillStyle = '#333';
-      level.platforms.forEach(p => ctx.fillRect(p.x, p.y, p.w, p.h));
+      if (Array.isArray(level.platforms)) {
+        level.platforms.forEach((p) => {
+          ctx.fillRect(p.x, p.y, p.w, p.h);
+        });
+      }
 
-      // Draw coins
-      level.coins.forEach(c => c.render(ctx));
+      // draw coins
+      if (Array.isArray(level.coins)) {
+        level.coins.forEach((c) => {
+          if (c.collected) return;
+          ctx.beginPath();
+          ctx.fillStyle = '#eab308';
+          ctx.arc(c.x, c.y, c.r ?? 6, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
 
-      // Update and draw enemies
-      level.enemies.forEach(e => { e.update(dt, level); e.render(ctx); });
+      // draw enemies (defensive: they may be plain objects or class instances)
+      if (Array.isArray(level.enemies)) {
+        level.enemies.forEach((e) => {
+          // if enemy has update() method, call it
+          if (typeof e.update === 'function') e.update(dt, level);
 
-      // Draw player (blue on ground, red if falling)
-      ctx.fillStyle = player.onGround ? '#0b74ff' : '#dc2626';
-      player.render(ctx);
+          if (typeof e.render === 'function') {
+            e.render(ctx);
+          } else {
+            // fallback rectangle
+            ctx.fillStyle = '#c33';
+            const ex = e.x ?? 0;
+            const ey = e.y ?? 0;
+            const ew = e.w ?? 28;
+            const eh = e.h ?? 28;
+            ctx.fillRect(ex, ey, ew, eh);
+          }
+        });
+      }
 
-      // Debug info
-      ctx.fillStyle = 'black';
-      ctx.font = '14px monospace';
-      ctx.fillText(`vx: ${player.vx.toFixed(1)}, vy: ${player.vy.toFixed(1)}, onGround: ${player.onGround}`, 10, 20);
+      // draw player (use player.render if present)
+      if (typeof player.render === 'function') {
+        // color overlay for debug: blue if onGround else red
+        ctx.save();
+        // let player's own render handle color; but we draw a debug border
+        player.render(ctx);
+        ctx.restore();
+      } else {
+        ctx.fillStyle = player.onGround ? '#0b74ff' : '#dc2626';
+        ctx.fillRect(player.x, player.y, player.w, player.h);
+      }
 
-      animationFrameId = requestAnimationFrame(loop);
+      // debug HUD
+      ctx.fillStyle = '#111';
+      ctx.font = '13px monospace';
+      ctx.fillText(`x:${player.x.toFixed(1)} y:${player.y.toFixed(1)} vx:${(player.vx ?? 0).toFixed(1)} vy:${(player.vy ?? 0).toFixed(1)} onGround:${!!player.onGround}`, 8, 18);
+
+      rafId = requestAnimationFrame(loop);
     };
 
-    animationFrameId = requestAnimationFrame(loop);
+    rafId = requestAnimationFrame(loop);
 
+    // cleanup
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      cancelAnimationFrame(rafId);
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, []); // run once
 
   return (
-    <div className="platformer-root">
-      <canvas ref={canvasRef} width={900} height={500} className="platformer-canvas"></canvas>
-      <button onClick={goHome} style={{ marginTop: '10px' }}>Back to Home</button>
+    <div className="platformer-root" style={{ textAlign: 'center' }}>
+      <div style={{ marginBottom: 8 }}>
+        <button onClick={goHome} className="back-button">Back</button>
+      </div>
+      <canvas ref={canvasRef} width={900} height={500} className="platformer-canvas" />
     </div>
   );
 }

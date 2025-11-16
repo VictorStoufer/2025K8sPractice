@@ -1,35 +1,36 @@
-// Physics.js — working collision
-export function updatePhysics(world, player, dt, settings) {
-  const gravity = settings.gravity || 800;
+export function updatePhysics(level, player, dt, settings) {
+  const gravity = settings.gravity || 900;
 
-  // Apply gravity
+  // apply gravity
   player.vy += gravity * dt;
 
-  // Apply movement
+  // apply velocities
   player.x += player.vx * dt;
   player.y += player.vy * dt;
 
-  // Reset onGround
   player.onGround = false;
 
-  // Check collision with platforms
-  world.platforms.forEach(p => {
-    // Axis-Aligned Bounding Box collision
+  // platform collision
+  level.platforms.forEach((p) => {
+    const px = player.x;
+    const py = player.y;
+    const pw = player.w;
+    const ph = player.h;
+
     if (
-      player.x < p.x + p.w &&
-      player.x + player.w > p.x &&
-      player.y < p.y + p.h &&
-      player.y + player.h > p.y
+      px < p.x + p.w &&
+      px + pw > p.x &&
+      py < p.y + p.h &&
+      py + ph > p.y
     ) {
-      // Player falling onto platform from above
-      if (player.vy >= 0 && (player.y + player.h - player.vy * dt) <= p.y) {
-        player.y = p.y - player.h;   // Snap to top
-        player.vy = 0;               // Stop vertical velocity
-        player.onGround = true;      // Player is grounded
-      }
-      // Hitting from sides
-      else {
-        if (player.x + player.w / 2 < p.x + p.w / 2) player.x = p.x - player.w;
+      // from top
+      if (player.vy > 0 && py + ph - player.vy * dt <= p.y) {
+        player.y = p.y - ph;
+        player.vy = 0;
+        player.onGround = true;
+      } else {
+        // hit from side
+        if (px + pw / 2 < p.x + p.w / 2) player.x = p.x - pw;
         else player.x = p.x + p.w;
         player.vx = 0;
       }

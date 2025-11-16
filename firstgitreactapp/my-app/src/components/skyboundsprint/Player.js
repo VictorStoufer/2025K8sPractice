@@ -4,37 +4,28 @@ export default class Player {
     this.y = y;
     this.w = 28;
     this.h = 40;
+
     this.vx = 0;
     this.vy = 0;
     this.onGround = false;
-    this.color = '#0b74ff'; // blue rectangle
   }
 
   applyInput(keys, speed) {
-    let tx = 0;
-    if (keys.left) tx -= speed;
-    if (keys.right) tx += speed;
-    this.vx += (tx - this.vx) * 0.2;
+    let targetVX = 0;
+    if (keys.left) targetVX -= speed;
+    if (keys.right) targetVX += speed;
 
-    if (keys.jump) this.jump(300);
+    // smooth accel
+    this.vx += (targetVX - this.vx) * 0.2;
   }
 
-  jump(strength) {
-    if (this.onGround) {
-      this.vy = -strength;
-      this.onGround = false;
-    }
-  }
-
-  integrate(dt) {
-    this.x += this.vx * dt;
-    this.y += this.vy * dt;
+  jump(force) {
+    this.vy = -force;
+    this.onGround = false;
   }
 
   render(ctx) {
-    ctx.save();
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.w, this.h); // <-- simple rectangle
-    ctx.restore();
+    ctx.fillStyle = "red";
+    ctx.fillRect(this.x, this.y, this.w, this.h);
   }
 }

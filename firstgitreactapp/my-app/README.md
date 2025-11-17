@@ -1,70 +1,204 @@
-# Getting Started with Create React App
+# 🎮 Retro Arcade - React Games Collection
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A collection of classic arcade games built with React, featuring Snake, Pong, and Skybound Sprint platformer. This project demonstrates modern React development practices including component-based architecture, state management, and game loop implementation.
 
-## Available Scripts
+## 🌟 Features
 
-In the project directory, you can run:
+### Games Included
+
+#### 🐍 Snake
+Classic snake game with smooth controls and score tracking. Navigate the snake to eat food and grow longer without hitting walls or yourself.
+
+#### 🏓 Pong
+The timeless paddle-and-ball game. Test your reflexes in this classic arcade experience.
+
+#### 🏃 Skybound Sprint
+A full-featured 2D platformer game with:
+- Physics-based movement and jumping
+- Enemy AI and collision detection
+- Level system with JSON-based level design
+- Coin collection mechanics
+- Pause/resume functionality
+- Smooth animations and responsive controls
+
+### Technical Highlights
+
+- **Zero Game Engine Dependencies**: All games built from scratch using vanilla React
+- **Component-Based Architecture**: Modular design for easy maintenance and extension
+- **React Router Integration**: Seamless navigation between games
+- **Custom Physics Engine**: Purpose-built physics system for the platformer
+- **Responsive Design**: Works across different screen sizes
+- **Clean Code Structure**: Well-organized components with separation of concerns
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/VictorStoufer/2025K8sPractice.git
+cd 2025K8sPractice/firstgitreactapp/my-app
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+The app will automatically reload when you make changes.
+
+## 🎯 How to Play
+
+### Snake
+- Use arrow keys or WASD to control the snake's direction
+- Eat food to grow longer and increase your score
+- Avoid hitting walls or your own tail
+
+### Pong
+- Use mouse or keyboard controls to move your paddle
+- Keep the ball in play and score against your opponent
+- First to reach the target score wins
+
+### Skybound Sprint
+- **Movement**: Arrow keys or A/D keys to move left/right
+- **Jump**: Space bar or Up arrow
+- **Pause**: Esc key
+- Collect coins and avoid enemies
+- Navigate through platforms to complete levels
+
+## 📁 Project Structure
+
+```
+my-app/
+├── public/
+│   ├── index.html
+│   ├── manifest.json
+│   └── robots.txt
+├── src/
+│   ├── components/
+│   │   ├── home/
+│   │   │   ├── Home.js          # Main menu/game selector
+│   │   │   └── Home.css
+│   │   ├── snake/
+│   │   │   ├── Snake.js         # Snake game logic
+│   │   │   └── Snake.css
+│   │   ├── pong/
+│   │   │   ├── Pong.js          # Pong game logic
+│   │   │   └── Pong.css
+│   │   └── skyboundsprint/
+│   │       ├── PlatformerGame.jsx   # Main game component
+│   │       ├── Player.js            # Player entity
+│   │       ├── Enemy.js             # Enemy AI
+│   │       ├── Coin.js              # Collectibles
+│   │       ├── Level.js             # Level management
+│   │       ├── Physics.js           # Physics engine
+│   │       ├── levels/
+│   │       │   └── Level1.json      # Level definitions
+│   │       ├── assets/              # Game sprites (optional)
+│   │       └── styles/
+│   │           └── Platformer.css
+│   ├── App.js                   # Main app component with routing
+│   ├── App.css
+│   ├── index.js
+│   └── index.css
+├── package.json
+└── README.md
+```
+
+## 🛠️ Available Scripts
 
 ### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Runs the app in development mode at [http://localhost:3000](http://localhost:3000)
 
 ### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in interactive watch mode
 
 ### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Builds the app for production to the `build` folder with optimized performance
 
 ### `npm run eject`
+**Note: This is a one-way operation!** Ejects from Create React App for full configuration control
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🔧 Technologies Used
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **React 18.2.0** - UI library
+- **React Router DOM 7.9.6** - Client-side routing
+- **React Scripts 5.0.1** - Build tooling
+- **Create React App** - Project bootstrapping
+- **CSS3** - Styling and animations
+- **Canvas API** - Game rendering (where applicable)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🎨 Customization
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Adding New Games
 
-## Learn More
+1. Create a new component in `src/components/[game-name]/`
+2. Import and add the game case in `App.js`:
+```javascript
+case "your-game":
+  return <YourGame goHome={() => setGame(null)} />;
+```
+3. Add a button in `Home.js`:
+```javascript
+<button onClick={() => setGame("your-game")}>Play Your Game</button>
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Modifying Skybound Sprint Levels
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Edit or create new JSON files in `src/components/skyboundsprint/levels/`:
+```json
+{
+  "platforms": [...],
+  "enemies": [...],
+  "coins": [...]
+}
+```
 
-### Code Splitting
+### Adding Sprites
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. Place image files in `src/components/skyboundsprint/assets/`
+2. Update rendering logic in `Player.js` and `Enemy.js`
 
-### Analyzing the Bundle Size
+## 📚 Learning Resources
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- [React Documentation](https://react.dev/)
+- [React Router Documentation](https://reactrouter.com/)
+- [Create React App Documentation](https://create-react-app.dev/)
+- [Game Development with React](https://react.dev/learn)
 
-### Making a Progressive Web App
+## 🤝 Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Contributions are welcome! Feel free to:
+- Add new games
+- Improve existing game mechanics
+- Enhance UI/UX
+- Fix bugs
+- Add tests
 
-### Advanced Configuration
+## 📝 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This project is open source and available under the MIT License.
 
-### Deployment
+## 🙏 Acknowledgments
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Built with Create React App
+- Inspired by classic arcade games
+- Physics engine designed for educational purposes
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Repository**: [2025K8sPractice](https://github.com/VictorStoufer/2025K8sPractice)  
+**Author**: Victor Stoufer  
+**Last Updated**: November 2025

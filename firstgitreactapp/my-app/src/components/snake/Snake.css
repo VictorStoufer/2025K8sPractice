@@ -1,0 +1,93 @@
+.SnakeGameCanvas { 
+  background: #222;
+  display: block;
+  margin: 20px auto;
+}
+
+.SnakeButtonArea {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers button horizontally */
+}
+
+.SnakeButtons {
+  background: #111;
+  border: 3px solid #00ffea;
+  padding: 14px 28px;
+  font-size: 16px;
+  color: #00ffea;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-shadow: 0 0 5px #00ffea;
+  box-shadow: 0 0 10px #00ffea;
+}
+
+.SnakeButtons:hover {
+  background: #00ffea;
+  color: #000;
+  box-shadow: 0 0 15px #00ffea, 0 0 25px #00ffaa;
+  transform: scale(1.05);
+}
+
+.SnakeButtons:active {
+  transform: scale(0.95);
+}
+
+/* ---- Code Graveyard ---- */
+
+
+/*
+.SnakeButtons {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+*/
+
+
+/*
+.SnakeButtons {
+  background: #111;
+  border: 3px solid #00ffea;
+  padding: 14px 28px;
+  font-size: 16px;
+  color: #00ffea;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-shadow: 0 0 5px #00ffea;
+  box-shadow: 0 0 10px #00ffea;
+  width: 20%;
+   -- Old way to center button
+  display: block;
+  margin: 20px auto;
+}
+
+.SnakeButtonArea {
+  margin-top: 20px;
+  display: flex;
+  /* flex-direction: column;
+  gap: 20px;
+  text-align: center; 
+  justify-content: center;    horizontal center 
+  align-items: center;         vertical center (optional) 
+}
+
+.SnakeButtons {
+  background: #111;
+  border: 3px solid #00ffea;
+  padding: 14px 28px;
+  font-size: 16px;
+  color: #00ffea;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-shadow: 0 0 5px #00ffea;
+  box-shadow: 0 0 10px #00ffea;
+  width: 20%;                
+}
+
+
+
+
+*/

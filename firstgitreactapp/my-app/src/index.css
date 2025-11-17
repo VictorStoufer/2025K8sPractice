@@ -1,20 +1,121 @@
-body {
+/* ======================= */
+/* Global Reset & Defaults */
+/* ======================= */
+
+* {
   margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f0f0f0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  margin: 10px;
+body {
+  background: #111;           /* dark retro background */
+  color: #00ffea;             /* neon green default text */
+  font-family: 'Arial', sans-serif; /* clean retro font */
+  min-height: 100vh;
+}
+
+/* ======================= */
+/* Headings & Text */
+/* ======================= */
+
+h1, h2, h3, h4, h5, h6 {
+  color: #00ffea;
+  text-shadow: 0 0 5px #00ffea, 0 0 10px #00ffaa;
+}
+
+p, span, label {
+  color: #00ffea;
+}
+
+/* ======================= */
+/* Arcade-style buttons */
+/* ======================= */
+
+.arcade-button {
+  background: #111;
+  border: 3px solid #00ffea;
+  padding: 14px 28px;
   font-size: 16px;
-  transition: background-color 0.2s;
+  color: #00ffea;
+  cursor: pointer;
+  text-shadow: 0 0 5px #00ffea;
+  box-shadow: 0 0 10px #00ffea;
+  transition: 0.2s ease, transform 0.1s ease;
+  display: inline-block;
+  border-radius: 6px;
 }
 
-button:hover {
-  background-color: #ddd;
+.arcade-button:hover {
+  background: #00ffea;
+  color: #000;
+  box-shadow: 0 0 15px #00ffea, 0 0 25px #00ffaa;
+  transform: scale(1.05);
 }
 
+.arcade-button:active {
+  transform: scale(0.95);
+}
+
+/* ======================= */
+/* Links */
+/* ======================= */
+
+a {
+  color: #00ffea;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+a:hover {
+  color: #00ffaa;
+  text-shadow: 0 0 5px #00ffaa;
+}
+
+/* ======================= */
+/* Containers & Layout */
+/* ======================= */
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.button-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+/* ======================= */
+/* Canvas Defaults */
+/* ======================= */
+
+canvas {
+  display: block;
+  margin: 20px auto;
+  background: #222;
+  border: 2px solid #00ffea;
+  border-radius: 6px;
+}
+
+/* ======================= */
+/* Form Elements */
+/* ======================= */
+
+input, select, textarea {
+  background: #111;
+  color: #00ffea;
+  border: 2px solid #00ffea;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 10px #00ffea;
+}

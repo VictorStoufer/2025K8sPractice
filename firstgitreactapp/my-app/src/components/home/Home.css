@@ -1,26 +1,64 @@
+/* Import a retro pixel font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #000; /* pure black arcade vibe */
+  font-family: 'Press Start 2P', cursive;
+  color: #00ffea; /* teal neon glow */
+}
+
+/* Entire home container */
 .home-container {
-  /* background-color: red; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
- }
+  text-align: center;
+}
 
+/* Title styling */
+.home-title {
+  font-size: 32px;
+  color: #00ffea;
+  text-shadow: 0 0 8px #00ffea, 0 0 12px #00ffaa;
+  margin-bottom: 40px;
+}
+
+/* The area containing the buttons */
 .button-zone {
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  gap: 20px;
+  align-items: center;       /* centers buttons horizontally */
+  width: 220px;              /* optional: limits container width */
+  margin: 0 auto;
 }
 
-
-/*
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+/* Retro glowing button style */
+.arcade-button {
+  background: #111;
+  border: 3px solid #00ffea;
+  padding: 14px 28px;
+  font-size: 16px;
+  color: #00ffea;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-shadow: 0 0 5px #00ffea;
+  box-shadow: 0 0 10px #00ffea;
+  width: 100%;
+  text-align: center;
 }
-*/
 
+.arcade-button:hover {
+  background: #00ffea;
+  color: #000;
+  box-shadow: 0 0 15px #00ffea, 0 0 25px #00ffaa;
+  transform: scale(1.05);
+}
+
+.arcade-button:active {
+  transform: scale(0.95);
+}

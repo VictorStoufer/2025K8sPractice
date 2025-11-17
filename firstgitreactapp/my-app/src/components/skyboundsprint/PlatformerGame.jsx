@@ -15,53 +15,47 @@ export default function PlatformerGame({ goHome }) {
     const ctx = canvas.getContext('2d');
 
     const level = new Level(levelData);
-    const player = new Player(50, 200); // starting position
+    const player = new Player(50, 200);
     player.color = '#ff0'; // bright yellow player
 
     const keys = { left: false, right: false, jump: false };
 
+    // Map all game keys
+    const gameKeys = {
+      ArrowLeft: 'left',
+      a: 'left',
+      ArrowRight: 'right',
+      d: 'right',
+      ArrowUp: 'jump',
+      w: 'jump',
+      ' ': 'jump',
+    };
+
+    // Handle key press for game input
     const handleKeyDown = (e) => {
-      switch (e.key) {
-        case 'ArrowLeft':
-        case 'a':
-          keys.left = true;
-          break;
-        case 'ArrowRight':
-        case 'd':
-          keys.right = true;
-          break;
-        case 'ArrowUp':
-        case 'w':
-        case ' ':
-          keys.jump = true;
-          break;
-        default:
-          break;
+      const key = gameKeys[e.key];
+      if (key) {
+        keys[key] = true;
       }
     };
 
     const handleKeyUp = (e) => {
-      switch (e.key) {
-        case 'ArrowLeft':
-        case 'a':
-          keys.left = false;
-          break;
-        case 'ArrowRight':
-        case 'd':
-          keys.right = false;
-          break;
-        case 'ArrowUp':
-        case 'w':
-        case ' ':
-          keys.jump = false;
-          break;
-        default:
-          break;
+      const key = gameKeys[e.key];
+      if (key) {
+        keys[key] = false;
+      }
+    };
+
+    // Prevent default scrolling for Space and arrow keys globally
+    const preventScroll = (e) => {
+      if (Object.keys(gameKeys).includes(e.key)) {
+        e.preventDefault();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('keydown', preventScroll);
 
     let lastTime = performance.now();
 
@@ -69,31 +63,29 @@ export default function PlatformerGame({ goHome }) {
       const dt = (time - lastTime) / 1000;
       lastTime = time;
 
-      // Apply input
-      const speed = 220; // player horizontal speed
+      // Horizontal movement
+      const speed = 220;
       let tx = 0;
       if (keys.left) tx -= speed;
       if (keys.right) tx += speed;
       player.vx += (tx - player.vx) * 0.2;
 
       // Jump
-      const jumpStrength = 500; // higher jump
+      const jumpStrength = 500;
       if (keys.jump && player.onGround) {
         player.vy = -jumpStrength;
         player.onGround = false;
       }
 
       // Physics update
-      updatePhysics(level, player, dt, { gravity: 900 }); // slightly lower gravity for easier jumping
+      updatePhysics(level, player, dt, { gravity: 900 });
 
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw platforms with color
-      ctx.fillStyle = '#0bff0b'; // green platforms
-      level.platforms.forEach((p) => {
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-      });
+      // Draw platforms
+      ctx.fillStyle = '#0bff0b';
+      level.platforms.forEach((p) => ctx.fillRect(p.x, p.y, p.w, p.h));
 
       // Draw player
       ctx.fillStyle = player.color;
@@ -107,6 +99,7 @@ export default function PlatformerGame({ goHome }) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('keydown', preventScroll);
     };
   }, []);
 
